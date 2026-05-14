@@ -216,4 +216,204 @@ window.addEventListener('scroll', () => {
 
 window.addEventListener('load', () => {
     document.body.classList.add('page-loaded');
+    const typingElement = document.querySelector('.typed-text');
+    if (!typingElement) return;
+
+    const phrases = [
+        'experiencias con impacto',
+        'interfaces rápidas y fluidas',
+        'proyectos que impresionan al cliente'
+    ];
+    let phraseIndex = 0;
+    let letterIndex = 0;
+    let deleting = false;
+    let currentText = '';
+
+    const type = () => {
+        const currentPhrase = phrases[phraseIndex];
+        if (!deleting) {
+            currentText = currentPhrase.slice(0, letterIndex + 1);
+            letterIndex += 1;
+            if (letterIndex === currentPhrase.length) {
+                deleting = true;
+                setTimeout(type, 1600);
+                return;
+            }
+        } else {
+            currentText = currentPhrase.slice(0, letterIndex - 1);
+            letterIndex -= 1;
+            if (letterIndex === 0) {
+                deleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+            }
+        }
+
+        typingElement.textContent = currentText;
+        setTimeout(type, deleting ? 80 : 120);
+    };
+    type();
+});
+
+// Secret Mode Logic
+let secretModeActive = false;
+let shipX = window.innerWidth / 2;
+let shipY = window.innerHeight - 100;
+let shipVelX = 0;
+let shipVelY = 0;
+let bullets = [];
+let destroyedElements = 0;
+let score = 0;
+let elementHealth = new Map();
+
+document.getElementById('secret-trigger').addEventListener('click', () => {
+    if (secretModeActive) return;
+    secretModeActive = true;
+    score = 0;
+    elementHealth.clear();
+
+    // Show overlay, ship and score
+    document.getElementById('secret-overlay').style.display = 'block';
+    const ship = document.getElementById('secret-ship');
+    ship.style.display = 'block';
+    ship.style.left = shipX + 'px';
+    ship.style.bottom = '20px';
+    document.getElementById('secret-score').style.display = 'block';
+    document.getElementById('secret-score').textContent = 'Score: 0';
+
+    // Add key listeners
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
+
+    // Start game loop
+    gameLoop();
+});
+
+let keys = {};
+function handleKeyDown(e) {
+    keys[e.code] = true;
+    if (e.code === 'Space') {
+        e.preventDefault();
+        shoot();
+    }
+}
+
+function handleKeyUp(e) {
+    keys[e.code] = false;
+}
+
+function shoot() {
+    const ship = document.getElementById('secret-ship');
+    const shipRect = ship.getBoundingClientRect();
+    const bullet = document.createElement('div');
+    bullet.className = 'secret-bullet';
+    bullet.style.position = 'fixed';
+    const startX = shipRect.left + shipRect.width / 2 - 2;
+    const startY = shipRect.top - 16;
+    bullet.style.left = startX + 'px';
+    bullet.style.top = startY + 'px';
+    document.body.appendChild(bullet);
+    bullets.push({ element: bullet, x: startX, y: startY, age: 0 });
+}
+
+function createExplosion(x, y) {
+    const explosion = document.createElement('div');
+    explosion.className = 'secret-explosion';
+    explosion.style.left = x + 'px';
+    explosion.style.top = y + 'px';
+    document.body.appendChild(explosion);
+    setTimeout(() => explosion.remove(), 600);
+}
+
+function gameLoop() {
+    if (!secretModeActive) return;
+
+    // Apply forces based on keys (difficult controls with inertia)
+    let accelX = 0;
+    let accelY = 0;
+    if (keys['ArrowLeft']) accelX -= 0.3;
+    if (keys['ArrowRight']) accelX += 0.3;
+    if (keys['ArrowUp']) accelY += 0.3;
+    if (keys['ArrowDown']) accelY -= 0.3;
+
+    // Update velocity with acceleration
+    shipVelX += accelX;
+    shipVelY += accelY;
+
+    // Apply friction/damping
+    shipVelX *= 0.98;
+    shipVelY *= 0.98;
+
+    // Update position
+    shipX += shipVelX;
+    shipY += shipVelY;
+
+    // Keep ship in bounds (but allow some freedom)
+    if (shipX < -50) shipX = window.innerWidth + 50;
+    if (shipX > window.innerWidth + 50) shipX = -50;
+    if (shipY < -50) shipY = window.innerHeight + 50;
+    if (shipY > window.innerHeight + 50) shipY = -50;
+
+    document.getElementById('secret-ship').style.left = shipX + 'px';
+    document.getElementById('secret-ship').style.bottom = (window.innerHeight - shipY - 60) + 'px';
+
+    // Move bullets
+    bullets.forEach((bullet, index) => {
+        bullet.age += 1;
+        bullet.y -= 10;
+        bullet.element.style.top = bullet.y + 'px';
+
+        // Check collision with page elements after bullet is visible for ~0.5s
+        const canHit = bullet.age > 30;
+        if (canHit) {
+            const elements = document.querySelectorAll('section, .project-card, .skill-card, .contact-card, .experience-card, nav, footer');
+            elements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                if (bullet.x >= rect.left && bullet.x <= rect.right && bullet.y >= rect.top && bullet.y <= rect.bottom) {
+                    createExplosion(bullet.x, bullet.y);
+                    if (!elementHealth.has(element)) {
+                        elementHealth.set(element, 1.0); // Full health
+                    }
+                    let health = elementHealth.get(element);
+                    health -= 0.12; // Reduce health by 12%
+                    health = Math.max(0, health);
+                    elementHealth.set(element, health);
+                    element.style.opacity = Math.max(0.15, health);
+                    score += 10; // Increase score
+                    document.getElementById('secret-score').textContent = 'Score: ' + score;
+
+                    if (health <= 0) {
+                        element.style.transition = 'all 0.5s ease';
+                        element.style.transform = 'scale(0) rotate(360deg)';
+                        setTimeout(() => element.remove(), 500);
+                    }
+
+                    bullet.element.remove();
+                    bullets.splice(index, 1);
+                    return;
+                }
+            });
+        }
+
+        // Remove bullet if off screen
+        if (bullet.y < -20) {
+            bullet.element.remove();
+            bullets.splice(index, 1);
+        }
+    });
+
+    requestAnimationFrame(gameLoop);
+}
+
+// Exit secret mode on ESC
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Escape' && secretModeActive) {
+        secretModeActive = false;
+        document.getElementById('secret-overlay').style.display = 'none';
+        document.getElementById('secret-ship').style.display = 'none';
+        document.getElementById('secret-score').style.display = 'none';
+        bullets.forEach(bullet => bullet.element.remove());
+        bullets = [];
+        document.removeEventListener('keydown', handleKeyDown);
+        document.removeEventListener('keyup', handleKeyUp);
+    }
 });

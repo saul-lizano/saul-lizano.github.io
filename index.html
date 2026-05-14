@@ -21,6 +21,7 @@
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#proyectos">Proyectos</a></li>
                 <li><a href="#contacto">Contacto</a></li>
+                <li><a href="CV_Marcos-Saul-Lizano.pdf" download>CV</a></li>
             </ul>
         </nav>
     </header>
@@ -35,11 +36,15 @@
         <div class="hero-content">
             <h1>Marcos Saúl Lizano Jaca</h1>
             <p class="subtitle">Desarrollador Web & Técnico en Sistemas</p>
+            <p class="hero-typewriter">Creo <span class="typed-text"></span></p>
             <p>Transformando ideas complejas en soluciones digitales eficientes y modernas</p>
             <div class="cta-buttons">
                 <a href="#proyectos" class="btn btn-primary">Ver Mis Proyectos</a>
                 <a href="#contacto" class="btn btn-secondary">Contáctame</a>
+                <a href="CV_Marcos-Saul-Lizano.pdf" download class="btn btn-primary">Descargar CV</a>
             </div>
+            
+            
         </div>
     </section>
 
@@ -72,6 +77,62 @@
                         </ul>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section class="contact" id="contacto">
+        <div class="container">
+            <h2>Contacto</h2>
+            <div class="contact-layout">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <div>
+                            <h3>✉️ Email</h3>
+                            <p>Envíame un correo directo y te responderé en menos de 24h.</p>
+                        </div>
+                        <a class="contact-action btn btn-secondary" href="mailto:slizanojaca@gmail.com">Enviar email</a>
+                    </div>
+                    <div class="contact-card">
+                        <div>
+                            <h3>📱 Teléfono</h3>
+                            <p>¿Quieres hablar rápido? Llámame o envía un WhatsApp.</p>
+                        </div>
+                        <a class="contact-action btn btn-secondary" href="tel:+34627223905">Llamar ahora</a>
+                    </div>
+                    <div class="contact-card">
+                        <div>
+                            <h3>📍 Ubicación</h3>
+                            <p>Zaragoza, Spain</p>
+                        </div>
+                        <a class="contact-action btn btn-secondary" href="https://www.google.com/maps/search/?api=1&query=Zaragoza+Spain" target="_blank">Ver en el mapa</a>
+                    </div>
+                    <div class="contact-card">
+                        <div>
+                            <h3>💼 LinkedIn</h3>
+                            <p>Conecta conmigo en LinkedIn y revisa mi experiencia profesional.</p>
+                        </div>
+                        <a class="contact-action btn btn-secondary" href="https://www.linkedin.com/in/sa%C3%BAl-lizano/" target="_blank">Ver perfil</a>
+                    </div>
+                </div>
+                <form class="contact-form" action="https://formspree.io/f/mvzlndpe" method="POST">
+                    <h3>Escríbeme un mensaje</h3>
+                    <p>Usa este formulario para enviarme una consulta rápida sobre tu proyecto o colaboración.</p>
+                    <div class="form-group">
+                        <label for="name">Nombre completo</label>
+                        <input type="text" id="name" name="name" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" id="email" name="email" placeholder="tu@correo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mensaje</label>
+                        <textarea id="message" name="message" rows="6" placeholder="¿En qué proyecto te puedo ayudar?" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+                </form>
             </div>
         </div>
     </section>
@@ -179,8 +240,12 @@
     <section class="projects" id="proyectos">
         <div class="container">
             <h2>Mis Proyectos</h2>
-            <div class="projects-grid">
-                <div class="project-card">
+            <p class="section-note">Una línea de tiempo con los proyectos más importantes ordenados por lanzamiento.</p>
+            <div class="projects-timeline">
+                <div class="timeline-track"></div>
+
+                <article class="timeline-card">
+                    <span class="timeline-marker">01</span>
                     <div class="project-header">
                         <h3>Gestión de Equipos</h3>
                         <p class="project-tag">proyecto01-gestion-equipos</p>
@@ -196,8 +261,10 @@
                         </div>
                         <a href="https://github.com/saul-lizano/proyecto01-gestion-equipos" class="project-link" target="_blank">Ver en GitHub →</a>
                     </div>
-                </div>
-                <div class="project-card">
+                </article>
+
+                <article class="timeline-card">
+                    <span class="timeline-marker">02</span>
                     <div class="project-header">
                         <h3>Gestión de Biblioteca</h3>
                         <p class="project-tag">proyecto02-gestion-biblioteca-escolar</p>
@@ -213,8 +280,10 @@
                         </div>
                         <a href="https://github.com/saul-lizano/proyecto02-gestion-biblioteca-escolar" class="project-link" target="_blank">Ver en GitHub →</a>
                     </div>
-                </div>
-                <div class="project-card">
+                </article>
+
+                <article class="timeline-card">
+                    <span class="timeline-marker">03</span>
                     <div class="project-header">
                         <h3>Blog Médicas Mundo</h3>
                         <p class="project-tag">proyecto03-blog-medicas-mundo</p>
@@ -230,32 +299,7 @@
                         </div>
                         <a href="https://github.com/saul-lizano/proyecto03-blog-medicas-mundo" class="project-link" target="_blank">Ver en GitHub →</a>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contacto -->
-    <section class="contact" id="contacto">
-        <div class="container">
-            <h2>Ponte en Contacto</h2>
-            <div class="contact-info">
-                <div class="contact-card">
-                    <h3>✉️ Email</h3>
-                    <a href="mailto:slizanojaca@gmail.com">slizanojaca@gmail.com</a>
-                </div>
-                <div class="contact-card">
-                    <h3>📱 Teléfono</h3>
-                    <a href="tel:+34627223905">(+34) 627-22-39-05</a>
-                </div>
-                <div class="contact-card">
-                    <h3>📍 Ubicación</h3>
-                    <p>Zaragoza, Spain</p>
-                </div>
-                <div class="contact-card">
-                    <h3>💼 LinkedIn</h3>
-                    <a href="https://www.linkedin.com/in/marcos-sa%C3%BAl-lizano-jaca-4956b5369/" target="_blank">Mi perfil</a>
-                </div>
+                </article>
             </div>
         </div>
     </section>
@@ -264,9 +308,14 @@
     <footer>
         <div class="container">
             <p>© 2026 Marcos Saúl Lizano Jaca. Todos los derechos reservados.</p>
-            <p>Desarrollador Web | Técnico en Sistemas | Apasionado por la Tecnología</p>
+            <p>Desarrollador Web | Técnico en Sistemas | <span id="secret-trigger">Apasionado por la Tecnología</span></p>
         </div>
     </footer>
+
+    <!-- Secret Mode Elements -->
+    <div id="secret-ship" class="secret-ship">🚀</div>
+    <div id="secret-overlay" class="secret-overlay"></div>
+    <div id="secret-score" class="secret-score">Score: 0</div>
 
     <div id="cursor-follower"></div>
     <div id="cursor-glow"></div>
